@@ -1,0 +1,6 @@
+{
+  "appTitle": "wheres_my_money",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}

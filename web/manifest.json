@@ -1,6 +1,6 @@
 {
-    "name": "wheres_my_money_app",
-    "short_name": "wheres_my_money_app",
+    "name": "wheres_my_money",
+    "short_name": "wheres_my_money",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

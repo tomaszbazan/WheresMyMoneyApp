@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "wheres_my_money_app" "\0"
+            VALUE "CompanyName", "pl.btsoftware" "\0"
+            VALUE "FileDescription", "wheres_my_money" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "wheres_my_money_app" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "wheres_my_money_app.exe" "\0"
-            VALUE "ProductName", "wheres_my_money_app" "\0"
+            VALUE "InternalName", "wheres_my_money" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 pl.btsoftware. All rights reserved." "\0"
+            VALUE "OriginalFilename", "wheres_my_money.exe" "\0"
+            VALUE "ProductName", "wheres_my_money" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
