@@ -1,20 +1,78 @@
+import 'package:wheres_my_money/core/theme/global_theme.dart';
+import 'package:flareline_uikit/service/localization_provider.dart';
+import 'package:wheres_my_money/routes.dart';
+import 'package:flareline_uikit/service/theme_provider.dart';
 import 'package:flutter/material.dart';
-
-import 'src/app.dart';
-import 'src/settings/settings_controller.dart';
-import 'src/settings/settings_service.dart';
+import 'package:wheres_my_money/flutter_gen/app_localizations.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
-  // Set up the SettingsController, which will glue user settings to multiple
-  // Flutter Widgets.
-  final settingsController = SettingsController(SettingsService());
+  WidgetsFlutterBinding.ensureInitialized();
 
-  // Load the user's preferred theme while the splash screen is displayed.
-  // This prevents a sudden theme change when the app is first displayed.
-  await settingsController.loadSettings();
+  await GetStorage.init();
 
-  // Run the app and pass in the SettingsController. The app listens to the
-  // SettingsController for changes, then passes it further down to the
-  // SettingsView.
-  runApp(MyApp(settingsController: settingsController));
+  if (GetPlatform.isDesktop && !GetPlatform.isWeb) {
+    await windowManager.ensureInitialized();
+
+    WindowOptions windowOptions = const WindowOptions(
+      size: Size(1080, 720),
+      minimumSize: Size(480, 360),
+      center: true,
+      backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      // titleBarStyle: TitleBarStyle.hidden,
+    );
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
+
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ThemeProvider(_)),
+          //theme
+          ChangeNotifierProvider(create: (_) => LocalizationProvider(_)),
+          //localizationen ai
+        ],
+        child: Builder(builder: (context) {
+          context.read<LocalizationProvider>().supportedLocales =
+              AppLocalizations.supportedLocales;
+          return MaterialApp(
+            navigatorKey: RouteConfiguration.navigatorKey,
+            restorationScopeId: 'rootFlareLine',
+            title: 'FlareLine',
+            debugShowCheckedModeBanner: false,
+            initialRoute: '/',
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            locale: context.watch<LocalizationProvider>().locale,
+            supportedLocales: AppLocalizations.supportedLocales,
+            onGenerateRoute: (settings) =>
+                RouteConfiguration.onGenerateRoute(settings),
+            themeMode: context.watch<ThemeProvider>().isDark
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            theme: GlobalTheme.lightThemeData,
+            darkTheme: GlobalTheme.darkThemeData,
+            builder: (context, widget) {
+              return MediaQuery(
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: TextScaler.noScaling),
+                child: widget!,
+              );
+            },
+          );
+        }));
+  }
 }
